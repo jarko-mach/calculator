@@ -6,15 +6,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <title>Doc</title>
 </head>
 
 <body>
-    <div class="numbers">
-        <div class="number">1</div>
+    <div class="inputAction">
+        <!-- <input type="text" class="text"> -->
+        <div class="boxContainer">
+        </div>
     </div>
-    <input type="text" class="2">
-    <script src="./index.js"></script>
+    <script type="text/javascript">
+        const handleEventClick = (event) => {
+            console.log(event.target.textContent)
+        }
+
+        const calculatorKeys =
+            ["(", ")", "%", "AC", 7, 8, 9, "÷", 4, 5, 6, "×", 1, 2, 3, "–", 0, ".", "=", "+"]
+
+        const divElement = document.querySelector(".boxContainer")
+
+        for (i = 0; i < calculatorKeys.length; i++) {
+            const box = document.createElement("div")
+            box.textContent = calculatorKeys[i]
+            if (typeof calculatorKeys[i] === 'number') {
+                box.classList.add("singleBox", "boxWithNumber")
+            }
+            else box.classList.add("singleBox", "boxWithAction")
+            divElement.appendChild(box)
+            box.addEventListener("click", handleEventClick, false);
+        } 
+    </script>
+    <!-- <script src="./index.js"></script> -->
 </body>
 
 </html>

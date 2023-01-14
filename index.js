@@ -1,5 +1,3 @@
-console.log("Kilo sera")
-
 const add = (a, b) => {
     return [a + b, '+'];
 }
