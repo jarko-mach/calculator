@@ -21,59 +21,7 @@
         <div class="boxContainer">
         </div>
     </div>
-
-    <script type="text/javascript">
-
-        var mathString = ""
-
-        const handleEventClick = (event) => {
-            var keyPressed = event.target.textContent
-            // console.log(keyPressed)
-            if (keyPressed === "–") { keyPressed = " - " }
-            if (keyPressed === "×") { keyPressed = " * " }
-            if (keyPressed === "÷") { keyPressed = " / " }
-            if (keyPressed === "AC") {
-                keyPressed = ""
-                mathString = keyPressed
-            }
-            mathString += keyPressed
-            displayString(mathString)
-        }
-
-        const handleEventEqual = (event) => {
-            const actionResult = eval("" + mathString)
-            displayString(actionResult)
-            mathString = actionResult
-        }
-
-        const displayString = (actionResult) => {
-            const inputElement = document.querySelector(".text")
-            inputElement.value = actionResult
-        }
-
-        const calculatorKeys =
-            ["(", ")", "%", "AC", 7, 8, 9, "÷", 4, 5, 6, "×", 1, 2, 3, "–", 0, ".", "=", "+"]
-
-        const divElement = document.querySelector(".boxContainer")
-
-        for (i = 0; i < calculatorKeys.length; i++) {
-            const box = document.createElement("div")
-            box.textContent = calculatorKeys[i]
-
-            if (typeof calculatorKeys[i] === 'number') {
-                box.classList.add("singleBox", "boxWithNumber")
-            }
-            else box.classList.add("singleBox", "boxWithAction")
-
-            divElement.appendChild(box)
-
-            if (calculatorKeys[i] === "=") {
-                box.addEventListener("click", handleEventEqual, false);
-            }
-            else box.addEventListener("click", handleEventClick, false);
-        } 
-    </script>
-    <!-- <script src="./index.js"></script> -->
+    <script type="module" src="./calculator.js"></script>
 </body>
 
 </html>
