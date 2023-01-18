@@ -1,26 +1,45 @@
 import { calculatorKeys } from "./calculatorData.js"
 
-var mathString = { display: "", execute: "" }
+var mathString = { display: "", execute: "", lastPressedKey: "" }
 
 const handleEventClick = (event) => {
-    const keyPressed = event.target.textContent
-    const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressed)
+    const keyPressedDisplay = event.target.textContent
+    const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressedDisplay)
     const keyPressedExecute = calculatorKeys[keyPressedIndex].execute
-    mathString.display += keyPressed
-    mathString.execute += keyPressedExecute
-    displayString(mathString.display)
+
+    if (!isNaN(Number(calculatorKeys[keyPressedIndex].execute))) {
+        // is a number
+        mathString.display += keyPressed
+        mathString.execute += keyPressedExecute
+    }
+    else {
+        // is not a number
+        const earlierPressedKey = mathString.execute[mathString.execute.length - 1]
+        mathString.execute += keyPressedExecute
+        console.log("not a number ", mathString.execute, " ", earlierPressedKey)
+    }
+
+    displayString(mathString.display, false)
 }
 
 const handleEventEqual = (event) => {
     const actionResult = eval("" + mathString.execute)
-    displayString(actionResult)
-    mathString.display = actionResult
-    mathString.execute = actionResult
+    displayString(actionResult, true, mathString.display)
+    mathString = { actionResult, actionResult }
 }
 
-const displayString = (actionResult) => {
-    const inputElement = document.querySelector(".text")
-    inputElement.value = actionResult
+const handleEventReset = (event) => {
+    displayString("0", true, "0")
+    mathString = { display: "0", execute: "0" }
+}
+
+const displayString = (actionResult, displayHistory, historyString) => {
+    const inputElement2 = document.querySelector(".displayText")
+    if (displayHistory) {
+        const inputElement1 = document.querySelector(".historyText")
+        inputElement1.value = historyString
+    }
+    inputElement2.value = actionResult
 }
 
 const divElement = document.querySelector(".boxContainer")
@@ -36,8 +55,17 @@ for (var i = 0; i < calculatorKeys.length; i++) {
 
     divElement.appendChild(box)
 
+    box.addEventListener("click", handleEventClick, false)
     if (calculatorKeys[i].execute === "=") {
+        box.removeEventListener("click", handleEventClick, false)
         box.addEventListener("click", handleEventEqual, false);
     }
-    else box.addEventListener("click", handleEventClick, false);
+    if (calculatorKeys[i].execute === "AC") {
+        box.removeEventListener("click", handleEventClick, false)
+        box.addEventListener("click", handleEventReset, false)
+    }
+    if (calculatorKeys[i].execute === "%") {
+        box.removeEventListener("click", handleEventClick, false)
+        box.addEventListener("click", handleEventReset, false)
+    }
 } 

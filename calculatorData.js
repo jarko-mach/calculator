@@ -9,7 +9,7 @@ export const calculatorKeys = [
     },
     {
         display: "% ",
-        execute: "*100",
+        execute: "/100",
     },
     {
         display: "AC",
@@ -68,7 +68,7 @@ export const calculatorKeys = [
         execute: "0",
     },
     {
-        display: ".",
+        display: ",",
         execute: ".",
     },
     {
