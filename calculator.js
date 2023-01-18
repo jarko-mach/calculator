@@ -1,6 +1,6 @@
 import { calculatorKeys } from "./calculatorData.js"
 
-var mathString = { display: "", execute: "", lastPressedKey: "" }
+var mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "" }
 
 const handleEventClick = (event) => {
     const keyPressedDisplay = event.target.textContent
@@ -9,14 +9,20 @@ const handleEventClick = (event) => {
 
     if (!isNaN(Number(calculatorKeys[keyPressedIndex].execute))) {
         // is a number
-        mathString.display += keyPressed
+        mathString.display += keyPressedDisplay
         mathString.execute += keyPressedExecute
+        mathString.previousKeyDisplay = ""
     }
     else {
         // is not a number
-        const earlierPressedKey = mathString.execute[mathString.execute.length - 1]
+        if (mathString.previousKeyDisplay !== "") {
+            mathString.display = mathString.display.slice(0, -mathString.previousKeyDisplay.length)
+            mathString.execute = mathString.execute.slice(0, -mathString.previousKeyExecute.length)
+        }
+        mathString.display += keyPressedDisplay
         mathString.execute += keyPressedExecute
-        console.log("not a number ", mathString.execute, " ", earlierPressedKey)
+        mathString.previousKeyDisplay = keyPressedDisplay
+        mathString.previousKeyExecute = keyPressedExecute
     }
 
     displayString(mathString.display, false)
@@ -25,12 +31,13 @@ const handleEventClick = (event) => {
 const handleEventEqual = (event) => {
     const actionResult = eval("" + mathString.execute)
     displayString(actionResult, true, mathString.display)
-    mathString = { actionResult, actionResult }
+    mathString.display = actionResult
+    mathString.execute = actionResult
 }
 
 const handleEventReset = (event) => {
-    displayString("0", true, "0")
-    mathString = { display: "0", execute: "0" }
+    displayString("", true, "")
+    mathString = { display: "", execute: "" }
 }
 
 const displayString = (actionResult, displayHistory, historyString) => {
@@ -60,7 +67,7 @@ for (var i = 0; i < calculatorKeys.length; i++) {
         box.removeEventListener("click", handleEventClick, false)
         box.addEventListener("click", handleEventEqual, false);
     }
-    if (calculatorKeys[i].execute === "AC") {
+    if (calculatorKeys[i].execute === "C") {
         box.removeEventListener("click", handleEventClick, false)
         box.addEventListener("click", handleEventReset, false)
     }

@@ -1,26 +1,28 @@
 .boxContainer {
     display: grid;
-    grid-template: repeat(5, 30px) / repeat(4, 50px);
+    grid-template: repeat(5, 30px) / repeat(4, 40px);
     column-gap: 5px;
     row-gap: 5px;
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .singleBox {
     text-align: center;
     line-height: 30px;
-    border-radius: 3px;
+    border-radius: 23px;
     cursor: pointer;
 }
 
 .boxWithNumber {
-    background-color: rgb(237, 237, 237);
+    background-color: rgb(236, 236, 236);
+    color: rgb(0, 0, 0);
 }
 
 .boxWithAction {
-    background-color: rgb(218, 218, 218);
+    background-color: rgb(222, 222, 222);
+    color:rgb(152, 139, 0);
 }
 
 .boxWithNumber:hover {
