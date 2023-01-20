@@ -1,3 +1,15 @@
+
+.calculator {
+    display: flex;
+    justify-content: center;
+}
+
+.calculatorFrame {
+    border: 1px solid rgb(182, 182, 182);
+    padding: 5px;
+    box-shadow: 3px 2px 6px rgb(206, 206, 206);
+
+}
 .boxContainer {
     display: grid;
     grid-template: repeat(5, 30px) / repeat(4, 40px);
@@ -10,8 +22,9 @@
 
 .singleBox {
     text-align: center;
-    line-height: 30px;
-    border-radius: 23px;
+    line-height: 29px;
+    border-radius: 5px;
+    border-style: none;
     cursor: pointer;
 }
 
@@ -21,23 +34,23 @@
 }
 
 .boxWithAction {
-    background-color: rgb(222, 222, 222);
-    color:rgb(152, 139, 0);
+    background-color: rgb(212, 245, 225);
+    color: rgb(66, 162, 10);
 }
 
 .boxWithNumber:hover {
-    background-color: rgb(225, 225, 225)
+    background-color: rgb(225, 225, 225);
 }
 
 .boxWithAction:hover {
-    background-color: rgb(206, 206, 206);
+    background-color: rgb(184, 247, 209);
 }
 
 .displayContainer {
     background-color: rgb(246, 246, 246);
     padding: 5px;
     margin-bottom: 5px;
-    width: 215px;
+    width: 175px;
     box-sizing: border-box;
     text-align: right;
 }
@@ -45,6 +58,8 @@
 .displayText {
     text-align: right;
     font-size: 16px;
+    width: 160px;
+    color: rgb(66, 180, 0);
 }
 
 .historyText {

@@ -68,7 +68,7 @@ export const calculatorKeys = [
         execute: "0",
     },
     {
-        display: " , ",
+        display: ",",
         execute: ".",
     },
     {
