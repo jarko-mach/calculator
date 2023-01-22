@@ -3,9 +3,17 @@ import { calculatorKeys } from "./calculatorData.js"
 var mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "", lastActionIsEqual: false }
 
 const handleEventClick = (event) => {
-    const keyPressedDisplay = event.target.textContent
+    var keyPressedDisplay = ""
+    if (event.type === 'click') {
+        keyPressedDisplay = event.target.textContent
+    } else {
+        keyPressedDisplay = event.key
+    }
+    // console.log("1. ", keyPressedDisplay, event.key)
     const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressedDisplay)
+    // console.log("2. ", keyPressedIndex)
     const keyPressedExecute = calculatorKeys[keyPressedIndex].execute
+    // console.log("3. ", keyPressedExecute)
 
     if (!isNaN(Number(keyPressedExecute))) {
         // is a number
@@ -34,7 +42,7 @@ const handleEventClick = (event) => {
     mathString.previousKeyDisplay = keyPressedDisplay
     mathString.previousKeyExecute = keyPressedExecute
     displayString(mathString.display, false)
-    console.log("wykonany event click")
+    console.log("wykonany event ", event.type)
 }
 
 const handleEventEqual = (event) => {
@@ -93,5 +101,14 @@ for (var i = 0; i < calculatorKeys.length; i++) {
 }
 
 document.addEventListener('keydown', (event) => {
-    console.log(event.key)
+    console.log("event.key", event.key)
+    calculatorKeys.forEach(el => {
+        // console.log(el.keyboard)
+        if (el.keyboard === event.key) {
+            console.log("el=", el, "znaleziono", el.keyboard)
+        }
+    })
+
+    console.log("key", event.key)
+    // handleEventClick(event)
 })
