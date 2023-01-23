@@ -3,17 +3,34 @@ import { calculatorKeys } from "./calculatorData.js"
 var mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "", lastActionIsEqual: false }
 
 const handleEventClick = (event) => {
-    var keyPressedDisplay = ""
-    if (event.type === 'click') {
-        keyPressedDisplay = event.target.textContent
-    } else {
-        keyPressedDisplay = event.key
-    }
+    const keyPressedDisplay = event.target.textContent
     // console.log("1. ", keyPressedDisplay, event.key)
     const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressedDisplay)
     // console.log("2. ", keyPressedIndex)
     const keyPressedExecute = calculatorKeys[keyPressedIndex].execute
     // console.log("3. ", keyPressedExecute)
+    modifyMathString(keyPressedIndex)
+}
+
+document.addEventListener('keydown', (event) => {
+    // console.log("event.key", event.key)
+    const keyPressedKeyboard = event.key
+    const keyPressedIndex = calculatorKeys.findIndex(el => el.keyboard === keyPressedKeyboard)
+    if (keyPressedIndex > -1) {
+        if (calculatorKeys[keyPressedIndex].keyboard !== "Enter") {
+            console.log("keyPressedIndex", keyPressedIndex)
+            console.log("keyPressedKeyboard", keyPressedKeyboard)
+            modifyMathString(keyPressedIndex)
+        } else {
+            handleEventEqual()
+        }
+    }
+})
+
+const modifyMathString = (keyPressedIndex) => {
+
+    const keyPressedDisplay = calculatorKeys[keyPressedIndex].display
+    const keyPressedExecute = calculatorKeys[keyPressedIndex].execute
 
     if (!isNaN(Number(keyPressedExecute))) {
         // is a number
@@ -45,10 +62,18 @@ const handleEventClick = (event) => {
     console.log("wykonany event ", event.type)
 }
 
+
 const handleEventEqual = (event) => {
+
+    function floatify(number) {
+        return parseFloat((number).toFixed(10));
+    }
+
     var actionResult = ""
+
     if (mathString.execute.length !== 0) {
-        actionResult = eval("" + mathString.execute)
+        console.log(mathString.execute)
+        actionResult = floatify(eval("" + mathString.execute))
         console.log("obliczam: ", mathString.execute, "=", actionResult)
     }
     displayString(actionResult, true, mathString.display)
@@ -99,16 +124,3 @@ for (var i = 0; i < calculatorKeys.length; i++) {
         box.addEventListener("click", handleEventReset, false)
     }
 }
-
-document.addEventListener('keydown', (event) => {
-    console.log("event.key", event.key)
-    calculatorKeys.forEach(el => {
-        // console.log(el.keyboard)
-        if (el.keyboard === event.key) {
-            console.log("el=", el, "znaleziono", el.keyboard)
-        }
-    })
-
-    console.log("key", event.key)
-    // handleEventClick(event)
-})
