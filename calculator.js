@@ -99,6 +99,14 @@ const handleEventProcent = (event) => {
     console.log("ma być obliczanie procentu")
 }
 
+const handleEventLeftBracket = (event) => {
+    console.log("ma być lewy nawias")
+}
+
+const handleEventRightBracket = (event) => {
+    console.log("ma być prawy nawias")
+}
+
 const displayString = (actionResult, displayHistory, historyString) => {
     const inputElement2 = document.querySelector(".displayText")
     if (displayHistory) {
@@ -122,16 +130,29 @@ for (var i = 0; i < calculatorKeys.length; i++) {
     divElement.appendChild(box)
 
     box.addEventListener("click", handleEventClick, false)
-    if (calculatorKeys[i].execute === "=") {
+    if (calculatorKeys[i].execute === "(") {
         box.removeEventListener("click", handleEventClick, false)
-        box.addEventListener("click", handleEventEqual, false);
+        box.addEventListener("click", handleEventLeftBracket, false)
     }
+
+    if (calculatorKeys[i].execute === ")") {
+        box.removeEventListener("click", handleEventClick, false)
+        box.addEventListener("click", handleEventRightBracket, false)
+    }
+
+
+    if (calculatorKeys[i].execute === "%") {
+        box.removeEventListener("click", handleEventClick, false)
+        box.addEventListener("click", handleEventProcent, false)
+    }
+
     if (calculatorKeys[i].execute === "C") {
         box.removeEventListener("click", handleEventClick, false)
         box.addEventListener("click", handleEventReset, false)
     }
-    if (calculatorKeys[i].execute === "%") {
+
+    if (calculatorKeys[i].execute === "=") {
         box.removeEventListener("click", handleEventClick, false)
-        box.addEventListener("click", handleEventProcent, false)
+        box.addEventListener("click", handleEventEqual, false);
     }
 }
