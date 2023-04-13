@@ -10,8 +10,8 @@ export const calculatorKeys = [
         keyboard: ")",
     },
     {
-        display: "% ",
-        execute: "/100",
+        display: "%",
+        execute: "%",
         keyboard: "%",
     },
     {

@@ -38,7 +38,7 @@ const modifyMathString = (keyPressedIndex) => {
             handleEventReset()
             mathString.lastActionIsEqual = false
         }
-        console.log("to jest numer")
+        console.log("to jest number")
         console.log("poprzedni znak to ", mathString.previousKeyDisplay, mathString.previousKeyExecute)
     }
     else {
@@ -66,7 +66,14 @@ const modifyMathString = (keyPressedIndex) => {
 const handleEventEqual = (event) => {
 
     function floatify(number) {
-        return parseFloat((number).toFixed(10));
+        // console.log("wynik 10", parseFloat((number).toFixed(10)))
+        // console.log("wynik 15", parseFloat((number).toFixed(15)))
+        const wynik = parseFloat((number).toFixed(15)) - parseFloat((number).toFixed(10))
+
+        if (Math.abs(wynik) > 0.00000000001)
+            return parseFloat((number).toFixed(15))
+        else
+            return parseFloat((number).toFixed(10))
     }
 
     var actionResult = ""
@@ -85,7 +92,11 @@ const handleEventEqual = (event) => {
 
 const handleEventReset = (event) => {
     displayString("", true, "")
-    mathString = { display: "", execute: "" }
+    mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "", lastActionIsEqual: false }
+}
+
+const handleEventProcent = (event) => {
+    console.log("ma być obliczanie procentu")
 }
 
 const displayString = (actionResult, displayHistory, historyString) => {
@@ -121,6 +132,6 @@ for (var i = 0; i < calculatorKeys.length; i++) {
     }
     if (calculatorKeys[i].execute === "%") {
         box.removeEventListener("click", handleEventClick, false)
-        box.addEventListener("click", handleEventReset, false)
+        box.addEventListener("click", handleEventProcent, false)
     }
 }
