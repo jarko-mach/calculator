@@ -4,16 +4,11 @@ var mathString = { display: "", execute: "", previousKeyDisplay: "", previousKey
 
 const handleEventClick = (event) => {
     const keyPressedDisplay = event.target.textContent
-    // console.log("1. ", keyPressedDisplay, event.key)
     const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressedDisplay)
-    // console.log("2. ", keyPressedIndex)
-    const keyPressedExecute = calculatorKeys[keyPressedIndex].execute
-    // console.log("3. ", keyPressedExecute)
     modifyMathString(keyPressedIndex)
 }
 
 document.addEventListener('keydown', (event) => {
-    // console.log("event.key", event.key)
     const keyPressedKeyboard = event.key
     const keyPressedIndex = calculatorKeys.findIndex(el => el.keyboard === keyPressedKeyboard)
     if (keyPressedIndex > -1) {
@@ -38,18 +33,18 @@ const modifyMathString = (keyPressedIndex) => {
             handleEventReset()
             mathString.lastActionIsEqual = false
         }
-        console.log("to jest number")
-        console.log("poprzedni znak to ", mathString.previousKeyDisplay, mathString.previousKeyExecute)
+        // console.log("to jest number")
+        // console.log("poprzedni znak to ", mathString.previousKeyDisplay, mathString.previousKeyExecute)
     }
     else {
         // is not a number
-        console.log(mathString.previousKeyDisplay, "is a number", !isNaN(Number(mathString.previousKeyDisplay)))
-        console.log("keyPressedExecute", keyPressedExecute)
+        // console.log(mathString.previousKeyDisplay, "poprzedni znak NOT number", !isNaN(Number(mathString.previousKeyDisplay)))
+        // console.log("keyPressedExecute", keyPressedExecute)
         if (isNaN(Number(mathString.previousKeyDisplay)) && keyPressedExecute !== "(" && keyPressedExecute !== ")") {
             mathString.display = mathString.display.slice(0, -mathString.previousKeyDisplay.length)
             mathString.execute = mathString.execute.slice(0, -mathString.previousKeyExecute.length)
-            console.log("ciacham", keyPressedExecute)
-            console.log("to jest znak")
+            // console.log("ciacham", keyPressedExecute)
+            // console.log("to jest znak")
         }
         else { mathString.lastActionIsEqual = false }
     }
@@ -59,7 +54,7 @@ const modifyMathString = (keyPressedIndex) => {
     mathString.previousKeyDisplay = keyPressedDisplay
     mathString.previousKeyExecute = keyPressedExecute
     displayString(mathString.display, false)
-    console.log("wykonany event ", event.type)
+    // console.log("wykonany modifyMathString ")
 }
 
 
@@ -76,18 +71,30 @@ const handleEventEqual = (event) => {
             return parseFloat((number).toFixed(10))
     }
 
+    function isUndefined(string) {
+        try {
+            eval(string)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     var actionResult = ""
 
-    if (mathString.execute.length !== 0) {
-        console.log(mathString.execute)
+    if ((mathString.execute.length !== 0) && (isUndefined(mathString.execute) === true)) {
+        // console.log("niby ok")
         actionResult = floatify(eval("" + mathString.execute))
-        console.log("obliczam: ", mathString.execute, "=", actionResult)
+        // console.log("obliczam: ", mathString.execute, "=", actionResult)
+        displayString(actionResult, true, mathString.display)
+        mathString.display = actionResult
+        mathString.execute = actionResult
+        mathString.lastActionIsEqual = true
+        console.log("wykonany event equal")
     }
-    displayString(actionResult, true, mathString.display)
-    mathString.display = actionResult
-    mathString.execute = actionResult
-    mathString.lastActionIsEqual = true
-    console.log("wykonany event equal")
+    else { 
+        // console.log("niby nie ok") 
+    }
 }
 
 const handleEventReset = (event) => {
