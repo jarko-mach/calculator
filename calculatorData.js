@@ -85,9 +85,9 @@ export const calculatorKeys = [
         keyboard: "0",
     },
     {
-        display: ",",
+        display: ".",
         execute: ".",
-        keyboard: ",",
+        keyboard: ".",
     },
     {
         display: " = ",

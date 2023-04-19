@@ -6,6 +6,7 @@ const handleEventClick = (event) => {
     const keyPressedDisplay = event.target.textContent
     const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressedDisplay)
     modifyMathString(keyPressedIndex)
+    document.querySelector(".displayText").classList.remove("calculation_error")
 }
 
 document.addEventListener('keydown', (event) => {
@@ -13,8 +14,6 @@ document.addEventListener('keydown', (event) => {
     const keyPressedIndex = calculatorKeys.findIndex(el => el.keyboard === keyPressedKeyboard)
     if (keyPressedIndex > -1) {
         if (calculatorKeys[keyPressedIndex].keyboard !== "Enter") {
-            console.log("keyPressedIndex", keyPressedIndex)
-            console.log("keyPressedKeyboard", keyPressedKeyboard)
             modifyMathString(keyPressedIndex)
         } else {
             handleEventEqual()
@@ -33,18 +32,12 @@ const modifyMathString = (keyPressedIndex) => {
             handleEventReset()
             mathString.lastActionIsEqual = false
         }
-        // console.log("to jest number")
-        // console.log("poprzedni znak to ", mathString.previousKeyDisplay, mathString.previousKeyExecute)
     }
     else {
         // is not a number
-        // console.log(mathString.previousKeyDisplay, "poprzedni znak NOT number", !isNaN(Number(mathString.previousKeyDisplay)))
-        // console.log("keyPressedExecute", keyPressedExecute)
-        if (isNaN(Number(mathString.previousKeyDisplay)) && keyPressedExecute !== "(" && keyPressedExecute !== ")") {
+        if (isNaN(Number(mathString.previousKeyDisplay)) && keyPressedExecute !== "(" && keyPressedExecute !== ")" && keyPressedExecute !== ".") {
             mathString.display = mathString.display.slice(0, -mathString.previousKeyDisplay.length)
             mathString.execute = mathString.execute.slice(0, -mathString.previousKeyExecute.length)
-            // console.log("ciacham", keyPressedExecute)
-            // console.log("to jest znak")
         }
         else { mathString.lastActionIsEqual = false }
     }
@@ -54,15 +47,11 @@ const modifyMathString = (keyPressedIndex) => {
     mathString.previousKeyDisplay = keyPressedDisplay
     mathString.previousKeyExecute = keyPressedExecute
     displayString(mathString.display, false)
-    // console.log("wykonany modifyMathString ")
 }
-
 
 const handleEventEqual = (event) => {
 
     function floatify(number) {
-        // console.log("wynik 10", parseFloat((number).toFixed(10)))
-        // console.log("wynik 15", parseFloat((number).toFixed(15)))
         const wynik = parseFloat((number).toFixed(15)) - parseFloat((number).toFixed(10))
 
         if (Math.abs(wynik) > 0.00000000001)
@@ -83,17 +72,16 @@ const handleEventEqual = (event) => {
     var actionResult = ""
 
     if ((mathString.execute.length !== 0) && (isUndefined(mathString.execute) === true)) {
-        // console.log("niby ok")
         actionResult = floatify(eval("" + mathString.execute))
-        // console.log("obliczam: ", mathString.execute, "=", actionResult)
         displayString(actionResult, true, mathString.display)
         mathString.display = actionResult
         mathString.execute = actionResult
         mathString.lastActionIsEqual = true
-        console.log("wykonany event equal")
     }
-    else { 
-        // console.log("niby nie ok") 
+    else {
+        const inputElement = document.querySelector(".displayText")
+        inputElement.value = "nieokreślony wynik"
+        inputElement.classList.add("calculation_error")
     }
 }
 

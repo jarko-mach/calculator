@@ -69,3 +69,8 @@
     margin-bottom: 5px;
     background-color: rgb(246, 246, 246);
 }
+
+.calculation_error {
+    color: rgb(218, 34, 34);
+    font-weight: 700;
+}
