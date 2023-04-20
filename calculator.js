@@ -1,12 +1,15 @@
 import { calculatorKeys } from "./calculatorData.js"
 
-var mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "", lastActionIsEqual: false }
+var mathString
+
+const MathStringZero = () => {
+    mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "", lastActionIsEqual: false }
+}
 
 const handleEventClick = (event) => {
     const keyPressedDisplay = event.target.textContent
     const keyPressedIndex = calculatorKeys.findIndex(el => el.display === keyPressedDisplay)
     modifyMathString(keyPressedIndex)
-    document.querySelector(".displayText").classList.remove("calculation_error")
 }
 
 document.addEventListener('keydown', (event) => {
@@ -23,6 +26,8 @@ document.addEventListener('keydown', (event) => {
 
 const modifyMathString = (keyPressedIndex) => {
 
+    document.querySelector(".displayText").classList.remove("calculation_error")
+
     const keyPressedDisplay = calculatorKeys[keyPressedIndex].display
     const keyPressedExecute = calculatorKeys[keyPressedIndex].execute
 
@@ -35,7 +40,7 @@ const modifyMathString = (keyPressedIndex) => {
     }
     else {
         // is not a number
-        if (isNaN(Number(mathString.previousKeyDisplay)) && keyPressedExecute !== "(" && keyPressedExecute !== ")" && keyPressedExecute !== ".") {
+        if ((isNaN(Number(mathString.previousKeyDisplay)) && mathString.previousKeyDisplay !== ")" && keyPressedExecute !== ".")) {
             mathString.display = mathString.display.slice(0, -mathString.previousKeyDisplay.length)
             mathString.execute = mathString.execute.slice(0, -mathString.previousKeyExecute.length)
         }
@@ -60,7 +65,7 @@ const handleEventEqual = (event) => {
             return parseFloat((number).toFixed(10))
     }
 
-    function isUndefined(string) {
+    function isNotUndefined(string) {
         try {
             eval(string)
             return true
@@ -71,7 +76,7 @@ const handleEventEqual = (event) => {
 
     var actionResult = ""
 
-    if ((mathString.execute.length !== 0) && (isUndefined(mathString.execute) === true)) {
+    if ((mathString.execute.length !== 0) && (isNotUndefined(mathString.execute) === true)) {
         actionResult = floatify(eval("" + mathString.execute))
         displayString(actionResult, true, mathString.display)
         mathString.display = actionResult
@@ -79,27 +84,24 @@ const handleEventEqual = (event) => {
         mathString.lastActionIsEqual = true
     }
     else {
-        const inputElement = document.querySelector(".displayText")
+        var inputElement = document.querySelector(".displayText")
         inputElement.value = "nieokreślony wynik"
         inputElement.classList.add("calculation_error")
+        inputElement = document.querySelector(".historyText")
+        inputElement.value = mathString.display
     }
 }
 
 const handleEventReset = (event) => {
     displayString("", true, "")
-    mathString = { display: "", execute: "", previousKeyDisplay: "", previousKeyExecute: "", lastActionIsEqual: false }
+    MathStringZero()
 }
 
-const handleEventProcent = (event) => {
-    console.log("ma być obliczanie procentu")
-}
-
-const handleEventLeftBracket = (event) => {
-    console.log("ma być lewy nawias")
-}
-
-const handleEventRightBracket = (event) => {
-    console.log("ma być prawy nawias")
+const handleEventCE = (event) => {
+    const indexOfCalc = calculatorKeys.findIndex(elem => elem.display === mathString.previousKeyDisplay)
+    mathString.display = mathString.display.slice(0, -calculatorKeys[indexOfCalc].display.length)
+    mathString.execute = mathString.execute.slice(0, -calculatorKeys[indexOfCalc].execute.length)
+    displayString(mathString.display, false)
 }
 
 const displayString = (actionResult, displayHistory, historyString) => {
@@ -112,6 +114,7 @@ const displayString = (actionResult, displayHistory, historyString) => {
 }
 
 const divElement = document.querySelector(".boxContainer")
+MathStringZero()
 
 for (var i = 0; i < calculatorKeys.length; i++) {
     const box = document.createElement("button")
@@ -125,20 +128,10 @@ for (var i = 0; i < calculatorKeys.length; i++) {
     divElement.appendChild(box)
 
     box.addEventListener("click", handleEventClick, false)
-    if (calculatorKeys[i].execute === "(") {
-        box.removeEventListener("click", handleEventClick, false)
-        box.addEventListener("click", handleEventLeftBracket, false)
-    }
 
-    if (calculatorKeys[i].execute === ")") {
+    if (calculatorKeys[i].execute === "CE") {
         box.removeEventListener("click", handleEventClick, false)
-        box.addEventListener("click", handleEventRightBracket, false)
-    }
-
-
-    if (calculatorKeys[i].execute === "%") {
-        box.removeEventListener("click", handleEventClick, false)
-        box.addEventListener("click", handleEventProcent, false)
+        box.addEventListener("click", handleEventCE, false)
     }
 
     if (calculatorKeys[i].execute === "C") {
